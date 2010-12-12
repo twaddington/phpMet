@@ -49,17 +49,22 @@ class TrimetArrival extends Trimet {
         $this->scheduled = new TrimetDatetime($scheduled);
         $this->estimated = new TrimetDatetime($estimated);
 
-        $this->arriving = $this->calculate_arrival_time();
+        $this->arriving = $this->calculateArrivalTime();
     }
 
     /**
-     * Calculate estimated arrival in minutes.
+     * Calculate estimated arrival time.
      */
-    public function calculate_arrival_time($format='i') {
-        $timedelta = $this->estimated->unix_datetime - time();
-        $time = date($format, $timedelta);
-        
-        if ($timedelta < 0) {
+    protected function calculateArrivalTime() {
+        return $this->estimated->unix_datetime - time();
+    }
+
+    /**
+     * Return estimated arrival time in minutes
+     */
+    public function getArrivalTime($format='i') {
+        $time = date($format, $this->arriving);
+        if ($time < 0) {
             return '-' . $time;
         }
         else {
@@ -69,8 +74,9 @@ class TrimetArrival extends Trimet {
 
     public function __toString() {
         $string = '';
+        $arrival_time = $this->getArrivalTime();
 
-        if ($this->arriving < 0) {
+        if ($arrival_time < 0) {
             $string = '%s departed %s %d minutes ago';
         }
         else {
@@ -78,7 +84,7 @@ class TrimetArrival extends Trimet {
         }
 
         return sprintf($string,
-            $this->shortSign, $this->location, abs($this->arriving));
+            $this->shortSign, $this->location, abs($arrival_time));
     }
 }
 
