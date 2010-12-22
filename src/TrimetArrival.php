@@ -14,12 +14,12 @@ class TrimetArrival extends Trimet {
     public $status;
     public $detour;
 
-    protected $location;
+    public $location;
 
-    protected $departed;
-    protected $scheduled;
-    protected $estimated;
-    protected $arriving;
+    public $departed;
+    public $scheduled;
+    public $estimated;
+    public $arriving;
 
     public function __construct($location,
         $block,
