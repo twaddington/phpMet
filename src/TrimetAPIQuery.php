@@ -79,6 +79,10 @@ class TrimetAPIQuery {
  
         return $arrivals;
     }
+
+    public static function sanitizeLocationID($string) {
+        return preg_match('/^[0-9]{1,5}$/i', $string);
+    }
 }
 
 ?>
