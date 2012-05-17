@@ -32,7 +32,7 @@ class TrimetAPIQuery {
     }
 
     public function getStops($lat, $lng, $radius) {
-        $url = $this->buildUrl($this->STOPS_URL,
+        $url = $this->buildUrl($this->STOP_URL,
             array('ll' => $lat . ',' . $lng, 'meters' => $radius));
         $response = $this->query($url);
 
