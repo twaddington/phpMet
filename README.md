@@ -3,37 +3,39 @@ A simple PHP library for interacting with the Portland, Oregon based
 
 ## Usage
 
-...
-
 Get upcoming arrivals for a stop by location id:
 
-    <?php
+```php
+<?php
 
-    require_once('./phpMet/src/Trimet.php');
+require_once('./phpMet/src/Trimet.php');
 
-    $api = new TrimetAPIQuery('my_application_token');
-    $arrivals = $api->getArrivals(TrimetAPIQuery::sanitizeLocationID(1448));
+$api = new TrimetAPIQuery('my_application_token');
+$arrivals = $api->getArrivals(TrimetAPIQuery::sanitizeLocationID(1448));
 
-    print_r($arrivals);
+print_r($arrivals);
 
-    ?>
+?>
+```
 
 Get nearby stops:
 
-    <?php
+```php
+<?php
 
-    require_once('./phpMet/src/Trimet.php');
+require_once('./phpMet/src/Trimet.php');
 
-    $api = new TrimetAPIQuery('my_application_token');
+$api = new TrimetAPIQuery('my_application_token');
 
-    $lat = 42.123;
-    $lng = -122.123;
-    $radius = 25; // meters
-    $stops = $api->getStops($lat, $lng, $radius);
+$lat = 42.123;
+$lng = -122.123;
+$radius = 25; // meters
+$stops = $api->getStops($lat, $lng, $radius);
 
-    print_r($stops);
+print_r($stops);
 
-    ?>
+?>
+```
 
 ## Contributing
 
