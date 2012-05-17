@@ -7,6 +7,7 @@ class TrimetAPIQuery {
     public $appID;
 
     protected $ARRIVAL_URL = 'http://developer.trimet.org/ws/V1/arrivals';
+    protected $STOP_URL = 'http://developer.trimet.org/ws/V1/stops';
 
     public function __construct($appID=APP_ID) {
         $this->appID = $appID;
@@ -28,6 +29,25 @@ class TrimetAPIQuery {
     protected function query($url) {
         return $this->parseResponse(
             $this->getResponse($url));
+    }
+
+    public function getStops($lat, $lng, $radius) {
+        $url = $this->buildUrl($this->STOPS_URL,
+            array('ll' => $lat . ',' . $lng, 'meters' => $radius));
+        $response = $this->query($url);
+
+        // Marshall locations to our Trimet object types
+        foreach ($response->location as $l) {
+            $locid = (string)$l['locid'];
+            $locations[] = new TrimetLocation(
+                $l['desc'],
+                $l['dir'],
+                $l['lat'],
+                $l['lng'],
+                $l['locid']);
+        }
+
+        return $locations;
     }
 
     public function getArrivals($locIDs) {
