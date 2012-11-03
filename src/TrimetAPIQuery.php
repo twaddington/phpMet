@@ -23,7 +23,10 @@ class TrimetAPIQuery {
     }
 
     protected function parseResponse($response) {
-        return new SimpleXMLElement($response);
+				if ($response) {
+					return new SimpleXMLElement($response);
+				}
+				return new SimpleXMLElement();
     }
 
     protected function query($url) {
