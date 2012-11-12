@@ -22,18 +22,17 @@ class TrimetArrival extends Trimet {
     public $arriving;
 
     public function __construct($location,
-        $block,
-        $departed,
-        $dir,
-        $estimated,
-        $fullSign,
-        $piece,
-        $route,
-        $scheduled,
-        $shortSign,
-        $status,
-        $detour) {
-
+            $block,
+            $departed,
+            $dir,
+            $estimated,
+            $fullSign,
+            $piece,
+            $route,
+            $scheduled,
+            $shortSign,
+            $status,
+            $detour) {
         $this->block = (string)$block;
         $this->dir = (string)$dir;
         $this->fullSign = (string)$fullSign;
@@ -56,6 +55,9 @@ class TrimetArrival extends Trimet {
      * Calculate estimated arrival time.
      */
     protected function calculateArrivalTime() {
+        if ($this->isScheduled()) {
+            return $this->scheduled->unix_datetime - time();
+        }
         return $this->estimated->unix_datetime - time();
     }
 
@@ -63,28 +65,33 @@ class TrimetArrival extends Trimet {
      * Return estimated arrival time in minutes
      */
     public function getArrivalTime($format='i') {
-        $time = date($format, $this->arriving);
+        $time = round($this->arriving / 60);
         if ($time < 0) {
             return '-' . $time;
-        }
-        else {
+        } else {
             return $time;
         }
     }
 
+    public function isScheduled() {
+        return $this->status == 'scheduled';
+    }
+
+    /**
+     * Return a brief description used for sorting arrivals
+     */
     public function __toString() {
         $string = '';
         $arrival_time = $this->getArrivalTime();
 
         if ($arrival_time < 0) {
             $string = '%s departed %s %d minutes ago';
-        }
-        else {
+        } else {
             $string = '%s arriving at %s in %d minutes';
         }
 
         return sprintf($string,
-            $this->shortSign, $this->location, abs($arrival_time));
+            $this->route, $this->location, abs($arrival_time));
     }
 }
 
